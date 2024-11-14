@@ -1,0 +1,15 @@
+### C ###
+# Object files
+*.o
+*.ko
+*.obj
+*.elf
+
+### macOS ###
+# General
+.DS_Store
+.AppleDouble
+.LSOverride
+
+### Visual Studio Code ###
+.vscode/*
