@@ -6,7 +6,7 @@
 /*   By: jihoolee <jihoolee@student.42SEOUL.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/08 00:00:02 by jihoolee          #+#    #+#             */
-/*   Updated: 2025/03/09 21:33:15 by jihoolee         ###   ########.fr       */
+/*   Updated: 2025/03/09 21:43:36 by jihoolee         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,8 +30,7 @@ static t_pool_header	*__append_new_pool(t_pool_header **p_pool_header,
 	return (new_pool);
 }
 
-static void	*__append_new_block(t_pool_header *const pool,
-	const size_t size)
+static void	*__append_new_block(t_pool_header *pool, const size_t size)
 {
 	t_block_header	*new_block;
 	size_t			aligned_size;

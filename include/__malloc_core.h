@@ -6,7 +6,7 @@
 /*   By: jihoolee <jihoolee@student.42SEOUL.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/23 10:27:34 by jihoolee          #+#    #+#             */
-/*   Updated: 2025/03/09 21:17:48 by jihoolee         ###   ########.fr       */
+/*   Updated: 2025/03/09 21:45:55 by jihoolee         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,7 @@ enum e_mem_type
 	LARGE
 };
 
-inline size_t	page_size(void)
+static inline size_t	page_size(void)
 {
 	static size_t	page_size = 0;
 
@@ -74,9 +74,8 @@ typedef struct s_heap
 enum e_mem_type	__get_mem_type(size_t size);
 
 // __find_next_available.c
-void			*__find_next_available_pool(t_pool_header *pool, size_t size);
-void			*__find_next_available_block(t_block_header *block,
-					size_t size);
+t_pool_header	*__find_next_available_pool(t_pool_header *pool, size_t size);
+t_block_header	*__find_next_available_block(t_pool_header *block, size_t size);
 
 // __allocate.c
 void			*__allocate_tiny(t_heap *const p_heap, size_t size);

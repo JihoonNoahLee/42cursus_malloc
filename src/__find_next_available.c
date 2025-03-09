@@ -6,7 +6,7 @@
 /*   By: jihoolee <jihoolee@student.42SEOUL.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/08 00:07:45 by jihoolee          #+#    #+#             */
-/*   Updated: 2025/03/09 21:32:29 by jihoolee         ###   ########.fr       */
+/*   Updated: 2025/03/09 21:45:11 by jihoolee         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,7 +39,7 @@ t_block_header	*__find_next_available_block(t_pool_header *pool, size_t size)
 			|| (block->header >> BLOCK_SIZE_SHIFT) < size_word_count))
 	{
 		block = (t_block_header *)((size_t *)block
-			+ (block->header >> BLOCK_SIZE_SHIFT));
+				+ (block->header >> BLOCK_SIZE_SHIFT));
 		curr_word_idx += (block->header >> BLOCK_SIZE_SHIFT);
 	}
 	if (curr_word_idx >= max_word_count)
