@@ -1,46 +1,22 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   malloc.c                                           :+:      :+:    :+:   */
+/*   __get_mem_type.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: jihoolee <jihoolee@student.42SEOUL.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/11/15 01:01:28 by jihoolee          #+#    #+#             */
-/*   Updated: 2025/03/09 20:26:26 by jihoolee         ###   ########.fr       */
+/*   Created: 2025/03/07 23:52:47 by jihoolee          #+#    #+#             */
+/*   Updated: 2025/03/08 00:13:13 by jihoolee         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "__malloc_core.h"
 
-static t_heap	g_heap;
-
-void	free(void *ptr)
+enum e_mem_type	__get_mem_type(size_t payload_size)
 {
-	if (ptr == NULL)
-		return ;
-}
-
-// TODO - switch  case?
-void	*malloc(size_t size)
-{
-	enum e_mem_type	type;
-	void			*ptr;
-
-	type = __get_mem_type(size);
-	if (type == TINY)
-		ptr = __allocate_tiny(&g_heap, size);
-	return (ptr);
-}
-
-void	*realloc(void *ptr, size_t size)
-{
-	void	*new_ptr;
-
-	new_ptr = NULL;
-	return (new_ptr);
-}
-
-void	show_alloc_mem(void)
-{
-	return ;
+	if (payload_size + sizeof(t_block_header) <= MAX_TINY_BLOCK_SIZE)
+		return (TINY);
+	else if (payload_size + sizeof(t_block_header) <= MAX_SMALL_BLOCK_SIZE)
+		return (SMALL);
+	return (LARGE);
 }
