@@ -6,7 +6,7 @@
 /*   By: jihoolee <jihoolee@student.42SEOUL.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/23 10:27:34 by jihoolee          #+#    #+#             */
-/*   Updated: 2025/03/09 21:45:55 by jihoolee         ###   ########.fr       */
+/*   Updated: 2025/03/13 00:42:56 by jihoolee         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,7 @@
 # include <unistd.h>
 # include <stdlib.h>
 # include <sys/mman.h>
+# include "libft.h"
 
 enum e_mem_type
 {
@@ -55,7 +56,7 @@ typedef struct s_block_header
 
 # define BLOCK_USED_FLAG	0b001
 // 0b110 reserved for future use
-# define BLOCK_SIZE_SHIFT	3
+# define METADATA_FLAG_BITS	0b111
 
 typedef struct s_pool_header
 {
@@ -79,5 +80,9 @@ t_block_header	*__find_next_available_block(t_pool_header *block, size_t size);
 
 // __allocate.c
 void			*__allocate_tiny(t_heap *const p_heap, size_t size);
+
+// __show_alloc_mem_utils.c
+void			__show_pool_start_addr(t_pool_header *pool, char *pool_type);
+void			__show_alloc_mem_pool(t_pool_header *pool);
 
 #endif
