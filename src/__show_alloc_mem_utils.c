@@ -46,7 +46,9 @@ static void	__show_alloc_mem_blocks(t_pool_header *pool)
 			ft_putnbr_fd(block_size, 1);
 			ft_putstr_fd(" bytes\n", 1);
 		}
-		block = (t_block_header *)((void *)block + block_size) + 1;
+		padded_block_size = ceil_align(sizeof(t_block_header) + block_size,
+				DOUBLE_WORD_SIZE);
+		block = (t_block_header *)((void *)block + padded_block_size);
 	}
 }
 
@@ -67,21 +69,17 @@ static t_pool_header	*__get_next_min_addr_pool(t_pool_header *pool,
 	return (min_addr_pool);
 }
 
-void	__show_pool_start_addr(t_pool_header *pool, char *pool_type)
-{
-	ft_putstr_fd(pool_type, 1);
-	ft_putstr_fd(" : ", 1);
-	ft_putptr_fd(__get_next_min_addr_pool(pool, NULL), 1);
-	ft_putstr_fd("\n", 1);
-}
-
-void	__show_alloc_mem_pool(t_pool_header *pool)
+void	__show_alloc_mem_pool(t_pool_header *pool, char *pool_type)
 {
 	size_t			pool_len;
 	size_t			iter;
 	t_pool_header	*prev_min_addr_pool;
 	t_pool_header	*min_addr_pool;
 
+	ft_putstr_fd(pool_type, 1);
+	ft_putstr_fd(" : ", 1);
+	ft_putptr_fd(__get_next_min_addr_pool(pool, NULL), 1);
+	ft_putstr_fd("\n", 1);
 	pool_len = __get_pool_len(pool);
 	iter = 0;
 	prev_min_addr_pool = NULL;
@@ -92,4 +90,27 @@ void	__show_alloc_mem_pool(t_pool_header *pool)
 		prev_min_addr_pool = min_addr_pool;
 		iter++;
 	}
+}
+
+size_t	__get_total_allocated_bytes(t_pool_header *pool)
+{
+	size_t			total_bytes;
+	t_block_header	*block;
+	size_t			padded_block_size;
+
+	total_bytes = 0;
+	while (pool)
+	{
+		block = (t_block_header *)(pool + 1);
+		while ((void *)block < (void *)pool + pool->max_size)
+		{
+			if (block->header & BLOCK_USED_FLAG)
+				total_bytes += block->header >> BLOCK_SIZE_SHIFT;
+			padded_block_size = ceil_align(sizeof(t_block_header)
+					+ (block->header >> BLOCK_SIZE_SHIFT), DOUBLE_WORD_SIZE);
+			block = (t_block_header *)((void *)block + padded_block_size);
+		}
+		pool = pool->next;
+	}
+	return (total_bytes);
 }

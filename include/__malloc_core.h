@@ -83,7 +83,7 @@ t_block_header	*__find_next_available_block(t_pool_header *block, size_t size);
 void			*__allocate_tiny(t_heap *const p_heap, size_t size);
 
 // __show_alloc_mem_utils.c
-void			__show_pool_start_addr(t_pool_header *pool, char *pool_type);
-void			__show_alloc_mem_pool(t_pool_header *pool);
+void			__show_alloc_mem_pool(t_pool_header *pool, char *pool_type);
+size_t			__get_total_allocated_bytes(t_pool_header *pool);
 
 #endif
