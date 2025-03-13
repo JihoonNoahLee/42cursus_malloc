@@ -6,7 +6,7 @@
 /*   By: jihoolee <jihoolee@student.42SEOUL.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/23 10:27:34 by jihoolee          #+#    #+#             */
-/*   Updated: 2025/03/13 00:42:56 by jihoolee         ###   ########.fr       */
+/*   Updated: 2025/03/13 18:39:05 by jihoolee         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,6 +57,7 @@ typedef struct s_block_header
 # define BLOCK_USED_FLAG	0b001
 // 0b110 reserved for future use
 # define METADATA_FLAG_BITS	0b111
+# define BLOCK_SIZE_SHIFT	3
 
 typedef struct s_pool_header
 {

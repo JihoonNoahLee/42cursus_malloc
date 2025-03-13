@@ -6,7 +6,7 @@
 /*   By: jihoolee <jihoolee@student.42SEOUL.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/10 07:28:40 by jihoolee          #+#    #+#             */
-/*   Updated: 2025/03/13 09:30:40 by jihoolee         ###   ########.fr       */
+/*   Updated: 2025/03/13 18:38:35 by jihoolee         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,11 +31,12 @@ static void	__show_alloc_mem_blocks(t_pool_header *pool)
 {
 	t_block_header	*block;
 	size_t			block_size;
+	size_t			padded_block_size;
 
 	block = (t_block_header *)(pool + 1);
 	while ((void *)block < (void *)pool + pool->max_size)
 	{
-		block_size = block->header & ~METADATA_FLAG_BITS;
+		block_size = block->header >> BLOCK_SIZE_SHIFT;
 		if (block->header & BLOCK_USED_FLAG)
 		{
 			ft_putptr_fd((void *)(block + 1), 1);
