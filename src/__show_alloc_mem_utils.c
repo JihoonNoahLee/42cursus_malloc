@@ -6,7 +6,7 @@
 /*   By: jihoolee <jihoolee@student.42SEOUL.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/10 07:28:40 by jihoolee          #+#    #+#             */
-/*   Updated: 2025/03/13 18:38:35 by jihoolee         ###   ########.fr       */
+/*   Updated: 2025/03/14 23:37:06 by jihoolee         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,16 +55,14 @@ static void	__show_alloc_mem_blocks(t_pool_header *pool)
 static t_pool_header	*__get_next_min_addr_pool(t_pool_header *pool,
 	t_pool_header *prev_min_addr_pool)
 {
-	t_pool_header	*iter;
 	t_pool_header	*min_addr_pool;
 
-	iter = pool;
-	min_addr_pool = NULL;
-	while (iter)
+	min_addr_pool = pool;
+	while (pool)
 	{
-		if (min_addr_pool < iter && iter > prev_min_addr_pool)
-			min_addr_pool = iter;
-		iter = iter->next;
+		if (pool < min_addr_pool && pool > prev_min_addr_pool)
+			min_addr_pool = pool;
+		pool = pool->next;
 	}
 	return (min_addr_pool);
 }
