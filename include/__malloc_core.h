@@ -6,7 +6,7 @@
 /*   By: jihoolee <jihoolee@student.42SEOUL.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/23 10:27:34 by jihoolee          #+#    #+#             */
-/*   Updated: 2025/03/13 18:39:05 by jihoolee         ###   ########.fr       */
+/*   Updated: 2025/03/14 23:30:24 by jihoolee         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,6 @@
 # define __MALLOC_CORE_H
 
 # include <unistd.h>
-# include <stdlib.h>
 # include <sys/mman.h>
 # include "libft.h"
 
@@ -81,6 +80,7 @@ t_block_header	*__find_next_available_block(t_pool_header *block, size_t size);
 
 // __allocate.c
 void			*__allocate_tiny(t_heap *const p_heap, size_t size);
+void			*__allocate_small(t_heap *const p_heap, size_t size);
 
 // __show_alloc_mem_utils.c
 void			__show_alloc_mem_pool(t_pool_header *pool, char *pool_type);

@@ -6,7 +6,7 @@
 /*   By: jihoolee <jihoolee@student.42SEOUL.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/15 01:01:28 by jihoolee          #+#    #+#             */
-/*   Updated: 2025/03/13 18:31:21 by jihoolee         ###   ########.fr       */
+/*   Updated: 2025/03/14 18:20:54 by jihoolee         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,6 @@ void	free(void *ptr)
 		return ;
 }
 
-// TODO - switch  case?
 void	*malloc(size_t size)
 {
 	enum e_mem_type	type;
@@ -29,6 +28,12 @@ void	*malloc(size_t size)
 	type = __get_mem_type(size);
 	if (type == TINY)
 		ptr = __allocate_tiny(&g_heap, size);
+	else if (type == SMALL)
+		ptr = __allocate_small(&g_heap, size);
+	// else if (type == LARGE)
+	// 	ptr = __allocate_large(&g_heap, size);
+	else
+		ptr = NULL;
 	return (ptr);
 }
 
