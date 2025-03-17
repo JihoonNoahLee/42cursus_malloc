@@ -6,7 +6,7 @@
 /*   By: jihoolee <jihoolee@student.42SEOUL.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/15 01:01:28 by jihoolee          #+#    #+#             */
-/*   Updated: 2025/03/17 16:05:50 by jihoolee         ###   ########.fr       */
+/*   Updated: 2025/03/17 16:29:47 by jihoolee         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,6 +65,6 @@ void	show_alloc_mem(void)
 	ft_putstr_fd("Total : ", 1);
 	ft_putnbr_fd(__get_total_allocated_bytes(g_heap.tiny_pool)
 		+ __get_total_allocated_bytes(g_heap.small_pool)
-		+ __get_total_allocated_bytes(g_heap.large_pool), 1);
+		+ __get_total_allocated_bytes_large(g_heap.large_pool), 1);
 	ft_putstr_fd(" bytes\n", 1);
 }
