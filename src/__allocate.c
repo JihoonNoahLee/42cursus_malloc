@@ -6,7 +6,7 @@
 /*   By: jihoolee <jihoolee@student.42SEOUL.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/08 00:00:02 by jihoolee          #+#    #+#             */
-/*   Updated: 2025/03/17 15:26:26 by jihoolee         ###   ########.fr       */
+/*   Updated: 2025/03/17 15:39:57 by jihoolee         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,17 +84,14 @@ void	*__allocate_large(t_heap *const p_heap, size_t payload_size)
 {
 	t_pool_header	*new_pool;
 	size_t			pool_size;
-	size_t			pool_header_size;
 
-	pool_header_size = ceil_align(sizeof(t_block_header), DOUBLE_WORD_SIZE);
-	pool_size = ceil_align(pool_header_size + payload_size, PAGE_SIZE);
-	new_pool = (t_pool_header *)mmap(NULL, pool_size, PROT_READ | PROT_WRITE,
-			MAP_ANON | MAP_PRIVATE, -1, 0);
-	if (new_pool == MAP_FAILED)
+	pool_size = ceil_align(
+			sizeof(t_pool_header) + sizeof(t_block_header) + payload_size,
+			PAGE_SIZE);
+	new_pool = __append_new_pool(&p_heap->large_pool, pool_size);
+	if (new_pool == NULL)
 		return (NULL);
-	new_pool->next = p_heap->large_pool;
-	new_pool->free_size = pool_size - (pool_header_size + payload_size);
-	new_pool->pool_size = pool_size;
-	p_heap->large_pool = new_pool;
-	return (((void *)new_pool) + pool_header_size);
+	((t_block_header *)(new_pool + 1))->header = payload_size;
+	return ((void *)(new_pool)
+			+ sizeof(t_pool_header) + sizeof(t_block_header));
 }
