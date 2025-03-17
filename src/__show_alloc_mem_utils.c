@@ -6,7 +6,7 @@
 /*   By: jihoolee <jihoolee@student.42SEOUL.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/10 07:28:40 by jihoolee          #+#    #+#             */
-/*   Updated: 2025/03/14 23:37:06 by jihoolee         ###   ########.fr       */
+/*   Updated: 2025/03/17 15:20:51 by jihoolee         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,7 @@ static void	__show_alloc_mem_blocks(t_pool_header *pool)
 	size_t			padded_block_size;
 
 	block = (t_block_header *)(pool + 1);
-	while ((void *)block < (void *)pool + pool->max_size)
+	while ((void *)block < (void *)pool + pool->pool_size)
 	{
 		block_size = block->header >> BLOCK_SIZE_SHIFT;
 		if (block->header & BLOCK_USED_FLAG)
@@ -100,7 +100,7 @@ size_t	__get_total_allocated_bytes(t_pool_header *pool)
 	while (pool)
 	{
 		block = (t_block_header *)(pool + 1);
-		while ((void *)block < (void *)pool + pool->max_size)
+		while ((void *)block < (void *)pool + pool->pool_size)
 		{
 			if (block->header & BLOCK_USED_FLAG)
 				total_bytes += block->header >> BLOCK_SIZE_SHIFT;

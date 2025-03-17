@@ -6,7 +6,7 @@
 /*   By: jihoolee <jihoolee@student.42SEOUL.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/08 00:00:02 by jihoolee          #+#    #+#             */
-/*   Updated: 2025/03/14 23:21:17 by jihoolee         ###   ########.fr       */
+/*   Updated: 2025/03/17 15:26:26 by jihoolee         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,7 @@ static t_pool_header	*__append_new_pool(t_pool_header **p_pool_header,
 	new_pool->next = *p_pool_header;
 	new_pool->free_size = pool_size
 		- (sizeof(t_pool_header) + sizeof(t_block_header));
-	new_pool->max_size = pool_size;
+	new_pool->pool_size = pool_size;
 	((t_block_header *)(new_pool + 1))->header
 		= (new_pool->free_size) << BLOCK_SIZE_SHIFT;
 	*p_pool_header = new_pool;
@@ -53,26 +53,48 @@ static void	*__append_new_block(t_pool_header *pool, const size_t size)
 	return ((void *)(new_block + 1));
 }
 
-void	*__allocate_tiny(t_heap *const p_heap, size_t size)
+void	*__allocate_tiny(t_heap *const p_heap, size_t payload_size)
 {
 	t_pool_header	*available_pool;
 
-	available_pool = __find_next_available_pool(p_heap->tiny_pool, size);
+	available_pool = __find_next_available_pool(p_heap->tiny_pool,
+			payload_size);
 	if (available_pool == NULL)
 		available_pool = __append_new_pool(&p_heap->tiny_pool, TINY_POOL_SIZE);
 	if (available_pool == NULL)
 		return (NULL);
-	return (__append_new_block(available_pool, size));
+	return (__append_new_block(available_pool, payload_size));
 }
 
-void	*__allocate_small(t_heap *const p_heap, size_t size)
+void	*__allocate_small(t_heap *const p_heap, size_t payload_size)
 {
 	t_pool_header	*available_pool;
 
-	available_pool = __find_next_available_pool(p_heap->small_pool, size);
+	available_pool = __find_next_available_pool(p_heap->small_pool,
+			payload_size);
 	if (available_pool == NULL)
-		available_pool = __append_new_pool(&p_heap->small_pool, SMALL_POOL_SIZE);
+		available_pool = __append_new_pool(&p_heap->small_pool,
+				SMALL_POOL_SIZE);
 	if (available_pool == NULL)
 		return (NULL);
-	return (__append_new_block(available_pool, size));
+	return (__append_new_block(available_pool, payload_size));
+}
+
+void	*__allocate_large(t_heap *const p_heap, size_t payload_size)
+{
+	t_pool_header	*new_pool;
+	size_t			pool_size;
+	size_t			pool_header_size;
+
+	pool_header_size = ceil_align(sizeof(t_block_header), DOUBLE_WORD_SIZE);
+	pool_size = ceil_align(pool_header_size + payload_size, PAGE_SIZE);
+	new_pool = (t_pool_header *)mmap(NULL, pool_size, PROT_READ | PROT_WRITE,
+			MAP_ANON | MAP_PRIVATE, -1, 0);
+	if (new_pool == MAP_FAILED)
+		return (NULL);
+	new_pool->next = p_heap->large_pool;
+	new_pool->free_size = pool_size - (pool_header_size + payload_size);
+	new_pool->pool_size = pool_size;
+	p_heap->large_pool = new_pool;
+	return (((void *)new_pool) + pool_header_size);
 }
