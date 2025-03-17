@@ -6,7 +6,7 @@
 /*   By: jihoolee <jihoolee@student.42SEOUL.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/23 10:27:34 by jihoolee          #+#    #+#             */
-/*   Updated: 2025/03/17 15:20:51 by jihoolee         ###   ########.fr       */
+/*   Updated: 2025/03/17 16:26:40 by jihoolee         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,8 +83,11 @@ void			*__allocate_tiny(t_heap *const p_heap, size_t size);
 void			*__allocate_small(t_heap *const p_heap, size_t size);
 void			*__allocate_large(t_heap *const p_heap, size_t size);
 
-// __show_alloc_mem_utils.c
-void			__show_alloc_mem_pool(t_pool_header *pool, char *pool_type);
+void			__show_alloc_mem_pool(t_pool_header *pool,
+							enum e_mem_type pool_type);
+
+// __get_total_allocated_bytes.c
 size_t			__get_total_allocated_bytes(t_pool_header *pool);
+size_t			__get_total_allocated_bytes_large(t_pool_header *pool);
 
 #endif

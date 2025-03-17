@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   __show_alloc_mem_utils.c                           :+:      :+:    :+:   */
+/*   __show_alloc_mem_pool.c                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: jihoolee <jihoolee@student.42SEOUL.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/10 07:28:40 by jihoolee          #+#    #+#             */
-/*   Updated: 2025/03/17 15:20:51 by jihoolee         ###   ########.fr       */
+/*   Updated: 2025/03/17 16:23:46 by jihoolee         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,6 +52,21 @@ static void	__show_alloc_mem_blocks(t_pool_header *pool)
 	}
 }
 
+static void	__show_alloc_mem_blocks_large(t_pool_header *pool)
+{
+	t_block_header	*block_header;
+	size_t			size;
+
+	block_header = (t_block_header *)(pool + 1);
+	size = block_header->header;
+	ft_putstr_fd((void *)(block_header + 1), 1);
+	ft_putstr_fd(" - ", 1);
+	ft_putptr_fd((void *)(block_header + 1) + size, 1);
+	ft_putstr_fd(" : ", 1);
+	ft_putnbr_fd(size, 1);
+	ft_putstr_fd(" bytes\n", 1);
+}
+
 static t_pool_header	*__get_next_min_addr_pool(t_pool_header *pool,
 	t_pool_header *prev_min_addr_pool)
 {
@@ -67,15 +82,17 @@ static t_pool_header	*__get_next_min_addr_pool(t_pool_header *pool,
 	return (min_addr_pool);
 }
 
-void	__show_alloc_mem_pool(t_pool_header *pool, char *pool_type)
+void	__show_alloc_mem_pool(t_pool_header *pool, enum e_mem_type pool_type)
 {
 	size_t			pool_len;
 	size_t			iter;
 	t_pool_header	*prev_min_addr_pool;
 	t_pool_header	*min_addr_pool;
+	static void		(*p_show_alloc_mem_blocks[3])(t_pool_header *);
 
-	ft_putstr_fd(pool_type, 1);
-	ft_putstr_fd(" : ", 1);
+	p_show_alloc_mem_blocks[TINY] = &__show_alloc_mem_blocks;
+	p_show_alloc_mem_blocks[SMALL] = &__show_alloc_mem_blocks;
+	p_show_alloc_mem_blocks[LARGE] = &__show_alloc_mem_blocks_large;
 	ft_putptr_fd(__get_next_min_addr_pool(pool, NULL), 1);
 	ft_putstr_fd("\n", 1);
 	pool_len = __get_pool_len(pool);
@@ -84,31 +101,8 @@ void	__show_alloc_mem_pool(t_pool_header *pool, char *pool_type)
 	while (iter < pool_len)
 	{
 		min_addr_pool = __get_next_min_addr_pool(pool, prev_min_addr_pool);
-		__show_alloc_mem_blocks(min_addr_pool);
+		(*p_show_alloc_mem_blocks[pool_type])(min_addr_pool);
 		prev_min_addr_pool = min_addr_pool;
 		iter++;
 	}
-}
-
-size_t	__get_total_allocated_bytes(t_pool_header *pool)
-{
-	size_t			total_bytes;
-	t_block_header	*block;
-	size_t			padded_block_size;
-
-	total_bytes = 0;
-	while (pool)
-	{
-		block = (t_block_header *)(pool + 1);
-		while ((void *)block < (void *)pool + pool->pool_size)
-		{
-			if (block->header & BLOCK_USED_FLAG)
-				total_bytes += block->header >> BLOCK_SIZE_SHIFT;
-			padded_block_size = ceil_align(sizeof(t_block_header)
-					+ (block->header >> BLOCK_SIZE_SHIFT), DOUBLE_WORD_SIZE);
-			block = (t_block_header *)((void *)block + padded_block_size);
-		}
-		pool = pool->next;
-	}
-	return (total_bytes);
 }

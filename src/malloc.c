@@ -6,7 +6,7 @@
 /*   By: jihoolee <jihoolee@student.42SEOUL.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/15 01:01:28 by jihoolee          #+#    #+#             */
-/*   Updated: 2025/03/14 23:42:36 by jihoolee         ###   ########.fr       */
+/*   Updated: 2025/03/17 16:05:50 by jihoolee         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,11 +48,20 @@ void	*realloc(void *ptr, size_t size)
 void	show_alloc_mem(void)
 {
 	if (g_heap.tiny_pool)
-		__show_alloc_mem_pool(g_heap.tiny_pool, "TINY");
+	{
+		ft_putstr_fd("TINY : ", 1);
+		__show_alloc_mem_pool(g_heap.tiny_pool, TINY);
+	}
 	if (g_heap.small_pool)
-		__show_alloc_mem_pool(g_heap.small_pool, "SMALL");
+	{
+		ft_putstr_fd("SMALL : ", 1);
+		__show_alloc_mem_pool(g_heap.small_pool, SMALL);
+	}
 	if (g_heap.large_pool)
-		__show_alloc_mem_pool(g_heap.large_pool, "LARGE");
+	{
+		ft_putstr_fd("LARGE : ", 1);
+		__show_alloc_mem_pool(g_heap.large_pool, LARGE);
+	}
 	ft_putstr_fd("Total : ", 1);
 	ft_putnbr_fd(__get_total_allocated_bytes(g_heap.tiny_pool)
 		+ __get_total_allocated_bytes(g_heap.small_pool)
