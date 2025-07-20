@@ -6,7 +6,7 @@
 /*   By: jihoolee <jihoolee@student.42SEOUL.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/15 01:01:28 by jihoolee          #+#    #+#             */
-/*   Updated: 2025/03/17 16:29:47 by jihoolee         ###   ########.fr       */
+/*   Updated: 2025/07/20 22:30:44 by jihoolee         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,8 +16,12 @@ static t_heap	g_heap = {0, };
 
 void	free(void *ptr)
 {
+	t_block_header	*block;
+
 	if (ptr == NULL)
 		return ;
+	(void)block;
+	block = (t_block_header *)(ptr - sizeof(t_block_header));
 }
 
 void	*malloc(size_t size)
@@ -41,30 +45,31 @@ void	*realloc(void *ptr, size_t size)
 {
 	void	*new_ptr;
 
+	(void)ptr;
+	(void)size;
 	new_ptr = NULL;
 	return (new_ptr);
 }
 
 void	show_alloc_mem(void)
 {
-	if (g_heap.tiny_pool)
+	t_pool_header	*pools;
+
+	pools = __sort_pools_by_address(g_heap);
+
+	while (pools)
 	{
-		ft_putstr_fd("TINY : ", 1);
-		__show_alloc_mem_pool(g_heap.tiny_pool, TINY);
-	}
-	if (g_heap.small_pool)
-	{
-		ft_putstr_fd("SMALL : ", 1);
-		__show_alloc_mem_pool(g_heap.small_pool, SMALL);
-	}
-	if (g_heap.large_pool)
-	{
-		ft_putstr_fd("LARGE : ", 1);
-		__show_alloc_mem_pool(g_heap.large_pool, LARGE);
+		if (pools->pool_size == TINY_POOL_SIZE)
+			__show_alloc_mem_pool(pools, TINY);
+		else if (pools->pool_size == SMALL_POOL_SIZE)
+			__show_alloc_mem_pool(pools, SMALL);
+		else
+			__show_alloc_mem_pool(pools, LARGE);
+		pools = pools->next;
 	}
 	ft_putstr_fd("Total : ", 1);
-	ft_putnbr_fd(__get_total_allocated_bytes(g_heap.tiny_pool)
-		+ __get_total_allocated_bytes(g_heap.small_pool)
-		+ __get_total_allocated_bytes_large(g_heap.large_pool), 1);
+	ft_putnbr_fd(__get_allocated_bytes(g_heap.tiny_pool)
+		+ __get_allocated_bytes(g_heap.small_pool)
+		+ __get_allocated_bytes_large(g_heap.large_pool), 1);
 	ft_putstr_fd(" bytes\n", 1);
 }

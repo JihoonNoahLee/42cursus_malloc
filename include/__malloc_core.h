@@ -6,7 +6,7 @@
 /*   By: jihoolee <jihoolee@student.42SEOUL.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/23 10:27:34 by jihoolee          #+#    #+#             */
-/*   Updated: 2025/03/17 16:26:40 by jihoolee         ###   ########.fr       */
+/*   Updated: 2025/07/20 21:59:29 by jihoolee         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,7 +56,7 @@ typedef struct s_block_header
 # define BLOCK_USED_FLAG	0b001
 // 0b110 reserved for future use
 # define METADATA_FLAG_BITS	0b111
-# define BLOCK_SIZE_SHIFT	3
+# define BLOCK_SIZE_MASK	(~METADATA_FLAG_BITS)
 
 typedef struct s_pool_header
 {
@@ -84,10 +84,10 @@ void			*__allocate_small(t_heap *const p_heap, size_t size);
 void			*__allocate_large(t_heap *const p_heap, size_t size);
 
 void			__show_alloc_mem_pool(t_pool_header *pool,
-							enum e_mem_type pool_type);
+										enum e_mem_type pool_type);
 
 // __get_total_allocated_bytes.c
-size_t			__get_total_allocated_bytes(t_pool_header *pool);
-size_t			__get_total_allocated_bytes_large(t_pool_header *pool);
+size_t			__get_allocated_bytes(t_pool_header *pool);
+size_t			__get_allocated_bytes_large(t_pool_header *pool);
 
 #endif

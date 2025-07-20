@@ -6,7 +6,7 @@
 #    By: jihoolee <jihoolee@student.42SEOUL.kr>     +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/11/15 00:49:18 by jihoolee          #+#    #+#              #
-#    Updated: 2025/07/13 01:26:48 by jihoolee         ###   ########.fr        #
+#    Updated: 2025/07/20 19:19:51 by jihoolee         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -23,7 +23,7 @@ CFLAGS		=	-Wall -Wextra -Werror -fPIC
 RM			=	rm -rf
 
 NAME		=	libft_malloc_$(HOSTTYPE).so
-LIB_NAME	=	ft_malloc_$(HOSTTYPE)
+LIB_NAME	=	libft_malloc.so
 
 INCLUDE_DIR	=	include
 
@@ -47,7 +47,10 @@ TEST_OBJ	=	$(TEST_SRC:.c=.o)
 
 .PHONY: all clean fclean re test
 
-all: $(NAME)
+all: $(LIB_NAME)
+
+$(LIB_NAME): $(NAME)
+	ln -sf $(NAME) $(LIB_NAME)
 
 clean:
 	$(RM) $(OBJ_DIR) $(TEST_OBJ)
@@ -55,12 +58,13 @@ clean:
 
 fclean: clean
 	$(RM) $(NAME)
+	$(RM) $(LIB_NAME)
 	make -C $(LIBFT_DIR) fclean
 
 re: fclean all
 
-test: $(NAME) $(TEST_OBJ)
-	$(CC) $(CFLAGS) -o test.out $(TEST_OBJ) -L. -l$(LIB_NAME) -Wl,-rpath,. -I $(INCLUDE_DIR) -I $(LIBFT_DIR)
+test: $(LIB_NAME) $(TEST_OBJ)
+	$(CC) $(CFLAGS) -o test.out $(TEST_OBJ) -L. -lft_malloc -Wl,-rpath,. -I $(INCLUDE_DIR) -I $(LIBFT_DIR)
 
 $(NAME): $(OBJS) $(LIBFT_DIR)/$(LIBFT)
 	$(CC) -shared -o $@ $(OBJS) -L$(LIBFT_DIR) -lft -L$(LIBFT_DIR) -I $(INCLUDE_DIR) -I $(LIBFT_DIR)
