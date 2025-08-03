@@ -6,7 +6,7 @@
 /*   By: jihoolee <jihoolee@student.42SEOUL.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/08 00:00:02 by jihoolee          #+#    #+#             */
-/*   Updated: 2025/07/20 21:20:39 by jihoolee         ###   ########.fr       */
+/*   Updated: 2025/08/04 01:32:05 by jihoolee         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,8 +22,7 @@ static t_pool_header	*__append_new_pool(t_pool_header **p_pool_header,
 	if (new_pool == MAP_FAILED)
 		return (NULL);
 	new_pool->next = *p_pool_header;
-	new_pool->free_size
-		= pool_size - (sizeof(t_pool_header) + sizeof(t_block_header));
+	new_pool->free_size = pool_size - sizeof(t_pool_header);
 	new_pool->pool_size = pool_size;
 	((t_block_header *)(new_pool + 1))->header = (new_pool->free_size);
 	*p_pool_header = new_pool;
@@ -34,22 +33,23 @@ static void	*__append_new_block(t_pool_header *pool, const size_t size)
 {
 	t_block_header	*new_block;
 	size_t			padded_block_size;
+	size_t			padded_block_payload_size;
 	t_block_header	*next_block;
 	size_t			next_block_size;
 
 	padded_block_size
-		= ceil_align(sizeof(t_block_header) + size, DOUBLE_WORD_SIZE)
-		- sizeof(t_block_header);
-	new_block = __find_next_available_block(pool, padded_block_size);
+		= ceil_align(sizeof(t_block_header) + size, DOUBLE_WORD_SIZE);
+	padded_block_payload_size = padded_block_size - sizeof(t_block_header);
+	new_block = __find_next_available_block(pool, padded_block_payload_size);
 	if (new_block == NULL)
 		return (NULL);
-	next_block = (t_block_header *)((void *)new_block + padded_block_size) + 1;
+	next_block = (t_block_header *)((void *)new_block + padded_block_size);
 	next_block_size
 		= (new_block->header & BLOCK_SIZE_MASK)
 		- (sizeof(t_block_header) + padded_block_size);
 	next_block->header = next_block_size;
-	new_block->header = size | BLOCK_USED_FLAG;
-	pool->free_size -= padded_block_size + sizeof(t_block_header);
+	new_block->header = padded_block_payload_size | BLOCK_USED_FLAG;
+	pool->free_size -= padded_block_size;
 	return ((void *)(new_block + 1));
 }
 

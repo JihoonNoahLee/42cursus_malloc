@@ -6,7 +6,7 @@
 /*   By: jihoolee <jihoolee@student.42SEOUL.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/23 10:27:34 by jihoolee          #+#    #+#             */
-/*   Updated: 2025/07/20 21:59:29 by jihoolee         ###   ########.fr       */
+/*   Updated: 2025/08/03 20:21:07 by jihoolee         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,9 +53,9 @@ typedef struct s_block_header
 	size_t	header;
 }	t_block_header;
 
-# define BLOCK_USED_FLAG	0b001
+# define BLOCK_USED_FLAG	((size_t)0b001)
 // 0b110 reserved for future use
-# define METADATA_FLAG_BITS	0b111
+# define METADATA_FLAG_BITS	((size_t)0b111)
 # define BLOCK_SIZE_MASK	(~METADATA_FLAG_BITS)
 
 typedef struct s_pool_header
@@ -75,19 +75,26 @@ typedef struct s_heap
 enum e_mem_type	__get_mem_type(size_t size);
 
 // __find_next_available.c
-t_pool_header	*__find_next_available_pool(t_pool_header *pool, size_t size);
-t_block_header	*__find_next_available_block(t_pool_header *block, size_t size);
+t_pool_header		*__find_next_available_pool(t_pool_header *pool,
+												size_t size);
+t_block_header		*__find_next_available_block(t_pool_header *block,
+													size_t size);
 
 // __allocate.c
-void			*__allocate_tiny(t_heap *const p_heap, size_t size);
-void			*__allocate_small(t_heap *const p_heap, size_t size);
-void			*__allocate_large(t_heap *const p_heap, size_t size);
+void				*__allocate_tiny(t_heap *const p_heap, size_t size);
+void				*__allocate_small(t_heap *const p_heap, size_t size);
+void				*__allocate_large(t_heap *const p_heap, size_t size);
 
-void			__show_alloc_mem_pool(t_pool_header *pool,
-										enum e_mem_type pool_type);
+// _show_alloc_mem_pool.c
+void				_show_alloc_mem_pool(const t_pool_header *pool,
+											enum e_mem_type type);
 
-// __get_total_allocated_bytes.c
-size_t			__get_allocated_bytes(t_pool_header *pool);
-size_t			__get_allocated_bytes_large(t_pool_header *pool);
+// _pool_traversal.c
+const t_pool_header	*_get_next_min_pool(const t_heap g_heap,
+										const t_pool_header *curr_min);
+const t_pool_header	*_get_last_pool_in_heap(const t_heap g_heap);
+
+// _get_allocated_bytes.c
+size_t			_get_allocated_bytes(const t_pool_header *pool);
 
 #endif

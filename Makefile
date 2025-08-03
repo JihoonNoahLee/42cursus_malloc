@@ -6,7 +6,7 @@
 #    By: jihoolee <jihoolee@student.42SEOUL.kr>     +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/11/15 00:49:18 by jihoolee          #+#    #+#              #
-#    Updated: 2025/07/20 19:19:51 by jihoolee         ###   ########.fr        #
+#    Updated: 2025/08/03 20:42:33 by jihoolee         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -32,8 +32,9 @@ SRC			=	malloc.c \
 				__allocate.c \
 				__find_next_available.c \
 				__get_mem_type.c \
-				__get_total_allocated_bytes.c \
-				__show_alloc_mem_pool.c
+				_get_allocated_bytes.c \
+				_pool_traversal.c \
+				_show_alloc_mem_pool.c
 
 OBJ_DIR		=	obj
 OBJS		=	$(addprefix $(OBJ_DIR)/, $(SRC:.c=.o))
@@ -41,7 +42,8 @@ OBJS		=	$(addprefix $(OBJ_DIR)/, $(SRC:.c=.o))
 LIBFT_DIR	=	libft
 LIBFT		=	libft.a
 
-TEST_SRC	=	test/test_main.c
+TEST_SRC	=	test/test_main.c \
+				test/print_mem.c
 TEST_OBJ	=	$(TEST_SRC:.c=.o)
 
 
@@ -64,16 +66,16 @@ fclean: clean
 re: fclean all
 
 test: $(LIB_NAME) $(TEST_OBJ)
-	$(CC) $(CFLAGS) -o test.out $(TEST_OBJ) -L. -lft_malloc -Wl,-rpath,. -I $(INCLUDE_DIR) -I $(LIBFT_DIR)
+	$(CC) $(CFLAGS) -o test.out $(TEST_OBJ) -L. -lft_malloc -Wl,-rpath,. -I $(INCLUDE_DIR) -I $(LIBFT_DIR) -I test
 
 $(NAME): $(OBJS) $(LIBFT_DIR)/$(LIBFT)
 	$(CC) -shared -o $@ $(OBJS) -L$(LIBFT_DIR) -lft -L$(LIBFT_DIR) -I $(INCLUDE_DIR) -I $(LIBFT_DIR)
 
 $(OBJ_DIR)/%.o: $(SRC_DIR)/%.c
 	@mkdir -p $(OBJ_DIR)
-	$(CC) $(CFLAGS) -I $(INCLUDE_DIR) -I $(LIBFT_DIR) -c $< -o $@
+	$(CC) $(CFLAGS) -I $(INCLUDE_DIR) -I $(LIBFT_DIR) -I test -c $< -o $@
 
-$(TEST_OBJ): $(TEST_SRC)
+test/%.o: test/%.c
 	$(CC) $(CFLAGS) -I $(INCLUDE_DIR) -I $(LIBFT_DIR) -c $< -o $@
 
 $(LIBFT_DIR)/$(LIBFT):

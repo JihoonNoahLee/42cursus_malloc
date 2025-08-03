@@ -6,7 +6,7 @@
 /*   By: jihoolee <jihoolee@student.42SEOUL.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/15 01:01:28 by jihoolee          #+#    #+#             */
-/*   Updated: 2025/07/20 22:30:44 by jihoolee         ###   ########.fr       */
+/*   Updated: 2025/08/04 02:12:25 by jihoolee         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,25 +51,30 @@ void	*realloc(void *ptr, size_t size)
 	return (new_ptr);
 }
 
+// TODO - malloc이 된 적 없을때 에러 없는지 검토
 void	show_alloc_mem(void)
 {
-	t_pool_header	*pools;
+	const t_pool_header	*minimum_pool;
+	const t_pool_header	*last_pool;
+	size_t			allocated_bytes;
 
-	pools = __sort_pools_by_address(g_heap);
-
-	while (pools)
+	allocated_bytes = 0;
+	minimum_pool = _get_next_min_pool(g_heap, NULL);
+	last_pool = _get_last_pool_in_heap(g_heap);
+	while (1)
 	{
-		if (pools->pool_size == TINY_POOL_SIZE)
-			__show_alloc_mem_pool(pools, TINY);
-		else if (pools->pool_size == SMALL_POOL_SIZE)
-			__show_alloc_mem_pool(pools, SMALL);
+		if (minimum_pool->pool_size == TINY_POOL_SIZE)
+			_show_alloc_mem_pool(minimum_pool, TINY);
+		else if (minimum_pool->pool_size == SMALL_POOL_SIZE)
+			_show_alloc_mem_pool(minimum_pool, SMALL);
 		else
-			__show_alloc_mem_pool(pools, LARGE);
-		pools = pools->next;
+			_show_alloc_mem_pool(minimum_pool, LARGE);
+		allocated_bytes += _get_allocated_bytes(minimum_pool);
+		if (minimum_pool == last_pool)
+			break ;
+		minimum_pool = _get_next_min_pool(g_heap, minimum_pool);
 	}
 	ft_putstr_fd("Total : ", 1);
-	ft_putnbr_fd(__get_allocated_bytes(g_heap.tiny_pool)
-		+ __get_allocated_bytes(g_heap.small_pool)
-		+ __get_allocated_bytes_large(g_heap.large_pool), 1);
+	ft_putnbr_fd(allocated_bytes, 1);
 	ft_putstr_fd(" bytes\n", 1);
 }
