@@ -6,13 +6,13 @@
 /*   By: jihoolee <jihoolee@student.42SEOUL.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/03 19:00:41 by jihoolee          #+#    #+#             */
-/*   Updated: 2025/08/24 20:08:39 by jihoolee         ###   ########.fr       */
+/*   Updated: 2025/08/24 23:16:59 by jihoolee         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "_malloc_core.h"
 
-static void ___show_alloc_mem_block(const t_block_header *block)
+static void	___show_alloc_mem_block(const t_block_header *block)
 {
 	size_t	block_payload_size;
 

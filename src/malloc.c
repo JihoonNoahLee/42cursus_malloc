@@ -6,7 +6,7 @@
 /*   By: jihoolee <jihoolee@student.42SEOUL.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/15 01:01:28 by jihoolee          #+#    #+#             */
-/*   Updated: 2025/08/24 20:11:22 by jihoolee         ###   ########.fr       */
+/*   Updated: 2025/08/25 00:14:41 by jihoolee         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,14 +14,19 @@
 
 static t_heap	g_heap = {0, };
 
+# TODO - test especially on freeing LARGE POOL
 void	free(void *ptr)
 {
 	t_block_header	*block;
+	t_pool_header	*pool;
 
 	if (ptr == NULL)
 		return ;
-	(void)block;
-	block = (t_block_header *)(ptr - sizeof(t_block_header));
+	block = (t_block_header *)ptr - 1;
+	pool = _get_pool_by_block(block, g_heap);
+	_free_block(block, pool);
+	if (pool->free_size + sizeof(t_pool_header) == pool->pool_size)
+		_release_pool(pool, &g_heap);
 }
 
 void	*malloc(size_t size)
@@ -51,7 +56,6 @@ void	*realloc(void *ptr, size_t size)
 	return (new_ptr);
 }
 
-// TODO - malloc이 된 적 없을때 에러 없는지 검토 & large malloc에 아마 충돌 있을거임
 void	show_alloc_mem(void)
 {
 	const t_pool_header	*minimum_pool;

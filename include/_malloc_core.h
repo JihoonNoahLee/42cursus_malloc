@@ -6,7 +6,7 @@
 /*   By: jihoolee <jihoolee@student.42SEOUL.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/23 10:27:34 by jihoolee          #+#    #+#             */
-/*   Updated: 2025/08/24 20:13:58 by jihoolee         ###   ########.fr       */
+/*   Updated: 2025/08/24 22:36:52 by jihoolee         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,6 +84,13 @@ t_block_header		*___find_next_available_block(t_pool_header *block,
 void				*_allocate_tiny(t_heap *const p_heap, size_t size);
 void				*_allocate_small(t_heap *const p_heap, size_t size);
 void				*_allocate_large(t_heap *const p_heap, size_t size);
+
+// _get_pool_by_block.c
+t_pool_header		*_get_pool_by_block(t_block_header *block,
+										const t_heap g_heap);
+
+// _free_block.c
+void				_free_block(t_block_header *block, t_pool_header *pool);
 
 // _show_alloc_mem_pool.c
 void				_show_alloc_mem_pool(const t_pool_header *pool,
