@@ -6,7 +6,7 @@
 #    By: jihoolee <jihoolee@student.42SEOUL.kr>     +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/11/15 00:49:18 by jihoolee          #+#    #+#              #
-#    Updated: 2025/08/03 20:42:33 by jihoolee         ###   ########.fr        #
+#    Updated: 2025/08/24 20:11:51 by jihoolee         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -29,10 +29,10 @@ INCLUDE_DIR	=	include
 
 SRC_DIR		=	src
 SRC			=	malloc.c \
-				__allocate.c \
 				__find_next_available.c \
-				__get_mem_type.c \
+				_allocate.c \
 				_get_allocated_bytes.c \
+				_get_mem_type.c \
 				_pool_traversal.c \
 				_show_alloc_mem_pool.c
 

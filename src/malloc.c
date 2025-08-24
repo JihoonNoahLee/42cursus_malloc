@@ -6,11 +6,11 @@
 /*   By: jihoolee <jihoolee@student.42SEOUL.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/15 01:01:28 by jihoolee          #+#    #+#             */
-/*   Updated: 2025/08/24 16:23:25 by jihoolee         ###   ########.fr       */
+/*   Updated: 2025/08/24 20:11:22 by jihoolee         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "__malloc_core.h"
+#include "_malloc_core.h"
 
 static t_heap	g_heap = {0, };
 
@@ -29,13 +29,13 @@ void	*malloc(size_t size)
 	enum e_mem_type	type;
 	void			*ptr;
 
-	type = __get_mem_type(size);
+	type = _get_mem_type(size);
 	if (type == TINY)
-		ptr = __allocate_tiny(&g_heap, size);
+		ptr = _allocate_tiny(&g_heap, size);
 	else if (type == SMALL)
-		ptr = __allocate_small(&g_heap, size);
+		ptr = _allocate_small(&g_heap, size);
 	else if (type == LARGE)
-		ptr = __allocate_large(&g_heap, size);
+		ptr = _allocate_large(&g_heap, size);
 	else
 		ptr = NULL;
 	return (ptr);

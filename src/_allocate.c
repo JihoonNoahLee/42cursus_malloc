@@ -1,16 +1,16 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   __allocate.c                                       :+:      :+:    :+:   */
+/*   _allocate.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: jihoolee <jihoolee@student.42SEOUL.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/08 00:00:02 by jihoolee          #+#    #+#             */
-/*   Updated: 2025/08/24 20:04:10 by jihoolee         ###   ########.fr       */
+/*   Updated: 2025/08/24 20:13:58 by jihoolee         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "__malloc_core.h"
+#include "_malloc_core.h"
 
 static t_pool_header	*__append_new_pool(t_pool_header **p_pool_header,
 	const size_t pool_size)
@@ -40,7 +40,7 @@ static void	*__append_new_block(t_pool_header *pool, const size_t size)
 	padded_block_size
 		= ceil_align(sizeof(t_block_header) + size, DOUBLE_WORD_SIZE);
 	padded_block_payload_size = padded_block_size - sizeof(t_block_header);
-	new_block = __find_next_available_block(pool, padded_block_payload_size);
+	new_block = ___find_next_available_block(pool, padded_block_payload_size);
 	if (new_block == NULL)
 		return (NULL);
 	next_block = (t_block_header *)((void *)new_block + padded_block_size);
@@ -53,7 +53,7 @@ static void	*__append_new_block(t_pool_header *pool, const size_t size)
 	return ((void *)(new_block + 1));
 }
 
-void	*__allocate_tiny(t_heap *const p_heap, size_t payload_size)
+void	*_allocate_tiny(t_heap *const p_heap, size_t payload_size)
 {
 	t_pool_header	*available_pool;
 
@@ -66,7 +66,7 @@ void	*__allocate_tiny(t_heap *const p_heap, size_t payload_size)
 	return (__append_new_block(available_pool, payload_size));
 }
 
-void	*__allocate_small(t_heap *const p_heap, size_t payload_size)
+void	*_allocate_small(t_heap *const p_heap, size_t payload_size)
 {
 	t_pool_header	*available_pool;
 
@@ -80,7 +80,7 @@ void	*__allocate_small(t_heap *const p_heap, size_t payload_size)
 	return (__append_new_block(available_pool, payload_size));
 }
 
-void	*__allocate_large(t_heap *const p_heap, size_t payload_size)
+void	*_allocate_large(t_heap *const p_heap, size_t payload_size)
 {
 	t_pool_header	*new_pool;
 	size_t			pool_size;

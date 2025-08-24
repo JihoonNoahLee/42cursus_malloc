@@ -6,11 +6,11 @@
 /*   By: jihoolee <jihoolee@student.42SEOUL.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/03 18:47:35 by jihoolee          #+#    #+#             */
-/*   Updated: 2025/08/04 07:55:10 by jihoolee         ###   ########.fr       */
+/*   Updated: 2025/08/24 20:08:37 by jihoolee         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "__malloc_core.h"
+#include "_malloc_core.h"
 
 static const t_pool_header	*__get_next_min_addr_pool(
 	const t_pool_header *prev_min,

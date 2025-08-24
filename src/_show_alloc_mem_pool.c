@@ -6,11 +6,11 @@
 /*   By: jihoolee <jihoolee@student.42SEOUL.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/03 19:00:41 by jihoolee          #+#    #+#             */
-/*   Updated: 2025/08/24 19:36:08 by jihoolee         ###   ########.fr       */
+/*   Updated: 2025/08/24 20:08:39 by jihoolee         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "__malloc_core.h"
+#include "_malloc_core.h"
 
 static void ___show_alloc_mem_block(const t_block_header *block)
 {

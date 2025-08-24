@@ -6,11 +6,11 @@
 /*   By: jihoolee <jihoolee@student.42SEOUL.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/08 00:07:45 by jihoolee          #+#    #+#             */
-/*   Updated: 2025/08/04 00:54:52 by jihoolee         ###   ########.fr       */
+/*   Updated: 2025/08/24 20:13:59 by jihoolee         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "__malloc_core.h"
+#include "_malloc_core.h"
 
 t_pool_header	*__find_next_available_pool(t_pool_header *pool, size_t size)
 {
@@ -23,7 +23,7 @@ t_pool_header	*__find_next_available_pool(t_pool_header *pool, size_t size)
 	return (pool);
 }
 
-t_block_header	*__find_next_available_block(t_pool_header *pool, size_t size)
+t_block_header	*___find_next_available_block(t_pool_header *pool, size_t size)
 {
 	void			*end_of_pool;
 	t_block_header	*block;

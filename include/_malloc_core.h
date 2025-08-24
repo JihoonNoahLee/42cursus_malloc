@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   __malloc_core.h                                    :+:      :+:    :+:   */
+/*   _malloc_core.h                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: jihoolee <jihoolee@student.42SEOUL.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/23 10:27:34 by jihoolee          #+#    #+#             */
-/*   Updated: 2025/08/03 20:21:07 by jihoolee         ###   ########.fr       */
+/*   Updated: 2025/08/24 20:13:58 by jihoolee         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,18 +72,18 @@ typedef struct s_heap
 	t_pool_header	*large_pool;
 }	t_heap;
 
-enum e_mem_type	__get_mem_type(size_t size);
+enum e_mem_type	_get_mem_type(size_t size);
 
 // __find_next_available.c
 t_pool_header		*__find_next_available_pool(t_pool_header *pool,
 												size_t size);
-t_block_header		*__find_next_available_block(t_pool_header *block,
+t_block_header		*___find_next_available_block(t_pool_header *block,
 													size_t size);
 
-// __allocate.c
-void				*__allocate_tiny(t_heap *const p_heap, size_t size);
-void				*__allocate_small(t_heap *const p_heap, size_t size);
-void				*__allocate_large(t_heap *const p_heap, size_t size);
+// _allocate.c
+void				*_allocate_tiny(t_heap *const p_heap, size_t size);
+void				*_allocate_small(t_heap *const p_heap, size_t size);
+void				*_allocate_large(t_heap *const p_heap, size_t size);
 
 // _show_alloc_mem_pool.c
 void				_show_alloc_mem_pool(const t_pool_header *pool,
