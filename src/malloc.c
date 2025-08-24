@@ -6,7 +6,7 @@
 /*   By: jihoolee <jihoolee@student.42SEOUL.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/15 01:01:28 by jihoolee          #+#    #+#             */
-/*   Updated: 2025/08/04 07:55:36 by jihoolee         ###   ########.fr       */
+/*   Updated: 2025/08/24 16:23:25 by jihoolee         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,6 +63,8 @@ void	show_alloc_mem(void)
 	last_pool = _get_last_pool_in_heap(g_heap);
 	while (1)
 	{
+		if (minimum_pool == NULL || last_pool == NULL)
+			break ;
 		if (minimum_pool->pool_size == TINY_POOL_SIZE)
 			_show_alloc_mem_pool(minimum_pool, TINY);
 		else if (minimum_pool->pool_size == SMALL_POOL_SIZE)

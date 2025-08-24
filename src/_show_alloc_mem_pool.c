@@ -6,11 +6,24 @@
 /*   By: jihoolee <jihoolee@student.42SEOUL.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/03 19:00:41 by jihoolee          #+#    #+#             */
-/*   Updated: 2025/08/04 01:38:29 by jihoolee         ###   ########.fr       */
+/*   Updated: 2025/08/24 19:36:08 by jihoolee         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "__malloc_core.h"
+
+static void ___show_alloc_mem_block(const t_block_header *block)
+{
+	size_t	block_payload_size;
+
+	block_payload_size = block->header & BLOCK_SIZE_MASK;
+	ft_putptr_fd((void *)(block + 1), 1);
+	ft_putstr_fd(" - ", 1);
+	ft_putptr_fd((void *)((size_t)(block + 1) + block_payload_size), 1);
+	ft_putstr_fd(" : ", 1);
+	ft_putnbr_fd(block_payload_size, 1);
+	ft_putstr_fd(" bytes\n", 1);
+}
 
 static void	__show_alloc_mem_blocks(const t_pool_header *pool)
 {
@@ -26,15 +39,7 @@ static void	__show_alloc_mem_blocks(const t_pool_header *pool)
 		block_payload_size = block_header->header & BLOCK_SIZE_MASK;
 		block_size = sizeof(t_block_header) + block_payload_size;
 		if (block_header->header & BLOCK_USED_FLAG)
-		{
-			ft_putptr_fd((void *)(block_header + 1), 1);
-			ft_putstr_fd(" - ", 1);
-			ft_putptr_fd(
-				(void *)((size_t)(block_header + 1) + block_payload_size), 1);
-			ft_putstr_fd(" : ", 1);
-			ft_putnbr_fd(block_payload_size, 1);
-			ft_putstr_fd(" bytes\n", 1);
-		}
+			___show_alloc_mem_block(block_header);
 		block_header = (t_block_header *)((void *)block_header + block_size);
 	}
 }
@@ -50,5 +55,8 @@ void	_show_alloc_mem_pool(const t_pool_header *pool, enum e_mem_type type)
 	ft_putstr_fd(" : ", 1);
 	ft_putptr_fd((void *)(pool), 1);
 	ft_putstr_fd("\n", 1);
-	__show_alloc_mem_blocks(pool);
+	if (type == TINY || type == SMALL)
+		__show_alloc_mem_blocks(pool);
+	else
+		___show_alloc_mem_block((t_block_header *)(pool + 1));
 }

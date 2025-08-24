@@ -6,7 +6,7 @@
 /*   By: jihoolee <jihoolee@student.42SEOUL.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/08 00:00:02 by jihoolee          #+#    #+#             */
-/*   Updated: 2025/08/04 01:32:05 by jihoolee         ###   ########.fr       */
+/*   Updated: 2025/08/24 20:04:10 by jihoolee         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,6 +84,8 @@ void	*__allocate_large(t_heap *const p_heap, size_t payload_size)
 {
 	t_pool_header	*new_pool;
 	size_t			pool_size;
+	size_t			padded_block_size;
+	size_t			padded_block_payload_size;
 
 	pool_size = ceil_align(
 			sizeof(t_pool_header) + sizeof(t_block_header) + payload_size,
@@ -91,7 +93,12 @@ void	*__allocate_large(t_heap *const p_heap, size_t payload_size)
 	new_pool = __append_new_pool(&p_heap->large_pool, pool_size);
 	if (new_pool == NULL)
 		return (NULL);
-	((t_block_header *)(new_pool + 1))->header = payload_size;
+	padded_block_size
+		= ceil_align(sizeof(t_block_header) + payload_size, DOUBLE_WORD_SIZE);
+	padded_block_payload_size = padded_block_size - sizeof(t_block_header);
+	new_pool->free_size -= padded_block_size;
+	((t_block_header *)(new_pool + 1))->header
+		= padded_block_payload_size | BLOCK_USED_FLAG;
 	return ((void *)(new_pool)
 			+ sizeof(t_pool_header) + sizeof(t_block_header));
 }
